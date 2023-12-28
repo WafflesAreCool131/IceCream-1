@@ -1,7 +1,6 @@
 name: Upstream
 on:
-  schedule:
-    - cron: "*/15 * * * *"
+  workflow_dispatch:
 jobs:
   upstream:
     runs-on: ubuntu-latest
@@ -15,11 +14,11 @@ jobs:
           java-version: 17
       - name: Configure Git
         run: git config --global user.email "action@github.com" && git config --global user.name "Github Action"
-      - name: Update upstream
+      - name: Update Upstream
         run: |
           ./scripts/updateUpstream.sh
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.TOKEN }}
           branch: ${{ github.ref }}
