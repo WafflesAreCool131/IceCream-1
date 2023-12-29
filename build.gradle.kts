@@ -14,7 +14,7 @@ allprojects {
 
     java {
         toolchain {
-            languageVersion.set(JavaLanguageVersion.of(17))
+            languageVersion = JavaLanguageVersion.of(17)
         }
     }
 }
@@ -24,7 +24,7 @@ val paperMavenPublicUrl = "https://repo.papermc.io/repository/maven-public/"
 subprojects {
     tasks.withType<JavaCompile>().configureEach {
         options.encoding = Charsets.UTF_8.name()
-        options.release.set(17)
+        options.release = 17
     }
     tasks.withType<Javadoc> {
         options.encoding = Charsets.UTF_8.name()
@@ -63,30 +63,30 @@ dependencies {
 }
 
 paperweight {
-    serverProject.set(project(":icecream-server"))
+    serverProject = project(":icecream-server")
 
-    remapRepo.set(paperMavenPublicUrl)
-    decompileRepo.set(paperMavenPublicUrl)
+    remapRepo = paperMavenPublicUrl
+    decompileRepo = paperMavenPublicUrl
 
     useStandardUpstream("purpur") {
-        url.set(github("PurpurMC", "Purpur"))
-        ref.set(providers.gradleProperty("purpurCommit"))
+        url = github("PurpurMC", "Purpur")
+        ref = providers.gradleProperty("purpurCommit")
 
         withStandardPatcher {
             baseName("Purpur")
 
-            apiPatchDir.set(layout.projectDirectory.dir("patches/api"))
-            apiOutputDir.set(layout.projectDirectory.dir("IceCream-API"))
+            apiPatchDir = layout.projectDirectory.dir("patches/api")
+            apiOutputDir = layout.projectDirectory.dir("IceCream-API")
 
-            serverPatchDir.set(layout.projectDirectory.dir("patches/server"))
-            serverOutputDir.set(layout.projectDirectory.dir("IceCream-Server"))
+            serverPatchDir = layout.projectDirectory.dir("patches/server")
+            serverOutputDir = layout.projectDirectory.dir("IceCream-Server")
         }
     }
 }
 
 tasks.generateDevelopmentBundle {
-    apiCoordinates.set("org.icecream.icecream:icecream-api")
-    mojangApiCoordinates.set("io.papermc.paper:paper-mojangapi")
+    apiCoordinates = "org.icecream.icecream:icecream-api"
+    mojangApiCoordinates = "io.papermc.paper:paper-mojangapi"
     libraryRepositories.set(
         listOf(
             "https://repo.maven.apache.org/maven2/",
