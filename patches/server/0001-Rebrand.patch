@@ -57,6 +57,18 @@ index 99597258e8e88cd9e2c901c4ac3ff7faeeabee2b..b11f03a5ef83a13aa2e2407be86b2e3c
          Properties properties = new Properties();
  
          if (stream != null) {
+diff --git a/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java b/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
+index 0aee1fadaeb948fd90d8e61ac57dbe7f810529ff..24e01e2e74760a54b84fad497081bef47cfac741 100644
+--- a/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
++++ b/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
+@@ -470,7 +470,7 @@ public final class CraftMagicNumbers implements UnsafeValues {
+ 
+     @Override
+     public com.destroystokyo.paper.util.VersionFetcher getVersionFetcher() {
+-        return new com.destroystokyo.paper.PaperVersionFetcher(); // Pufferfish // Purpur
++        return new org.icecream.icecream.IceCreamVersionFetcher(); // Pufferfish // Purpur // IceCream
+     }
+
 diff --git a/src/main/java/org/icecream/icecream/IceCreamVersionFetcher.java b/src/main/java/org/icecream/icecream/IceCreamVersionFetcher.java
 new file mode 100644
 index 0000000000000000000000000000000000000000..8ab83713f3c73d95db9e1b8542aed547da8164b1
