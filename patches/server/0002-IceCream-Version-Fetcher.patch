@@ -5,7 +5,7 @@ Subject: [PATCH] IceCream Version Fetcher
 
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java b/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
-index 0aee1fadaeb948fd90d8e61ac57dbe7f810529ff..24e01e2e74760a54b84fad497081bef47cfac741 100644
+index c909efd2060dc95bd3ecb8c9fec36a1e69a642ff..efd6f8c985c1ccf0380e4f308a69bb3c2b31392a 100644
 --- a/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
 +++ b/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
 @@ -470,7 +470,7 @@ public final class CraftMagicNumbers implements UnsafeValues {
