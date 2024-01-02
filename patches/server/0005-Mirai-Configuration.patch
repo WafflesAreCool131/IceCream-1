@@ -1,0 +1,249 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: etil2jz <81570777+etil2jz@users.noreply.github.com>
+Date: Wed, 20 Jul 2022 22:07:01 +0200
+Subject: [PATCH] Mirai Configuration
+
+
+diff --git a/src/main/java/co/aikar/timings/TimingsExport.java b/src/main/java/co/aikar/timings/TimingsExport.java
+index 2cc44fbf8e5bd436b6d4e19f6c06b351e750cb31..3491ee7e1dfeb130ffab57e9696b784220aeae67 100644
+--- a/src/main/java/co/aikar/timings/TimingsExport.java
++++ b/src/main/java/co/aikar/timings/TimingsExport.java
+@@ -242,7 +242,8 @@ public class TimingsExport extends Thread {
+             pair("spigot", mapAsJSON(Bukkit.spigot().getSpigotConfig(), null)),
+             pair("bukkit", mapAsJSON(Bukkit.spigot().getBukkitConfig(), null)),
+             pair("paper", mapAsJSON(Bukkit.spigot().getPaperConfig(), null)), // Pufferfish
+-            pair("pufferfish", mapAsJSON(gg.pufferfish.pufferfish.PufferfishConfig.getConfigCopy(), null)) // Pufferfish
++            pair("pufferfish", mapAsJSON(gg.pufferfish.pufferfish.PufferfishConfig.getConfigCopy(), null)), // Pufferfish // Mirai
++            pair("mirai", mapAsJSON(dev.etil.mirai.MiraiConfig.getConfigCopy(), null)) // Mirai
+         ));
+ 
+         new TimingsExport(listeners, parent, history).start();
+diff --git a/src/main/java/dev/etil/mirai/MiraiCommand.java b/src/main/java/dev/etil/mirai/MiraiCommand.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..cdfb44177311987a19d3867df2d158647e6cc9a3
+--- /dev/null
++++ b/src/main/java/dev/etil/mirai/MiraiCommand.java
+@@ -0,0 +1,68 @@
++package dev.etil.mirai;
++
++import java.io.IOException;
++import java.util.Collections;
++import java.util.List;
++import java.util.stream.Collectors;
++import java.util.stream.Stream;
++import net.kyori.adventure.text.Component;
++import net.kyori.adventure.text.format.NamedTextColor;
++import net.md_5.bungee.api.ChatColor;
++import net.minecraft.server.MinecraftServer;
++import org.bukkit.Bukkit;
++import org.bukkit.Location;
++import org.bukkit.command.Command;
++import org.bukkit.command.CommandSender;
++
++public class MiraiCommand extends Command {
++
++    public MiraiCommand() {
++        super("mirai");
++        this.description = "Mirai related commands";
++        this.usageMessage = "/mirai [reload | version]";
++        this.setPermission("bukkit.command.mirai");
++    }
++
++    public static void init() {
++        MinecraftServer.getServer().server.getCommandMap().register("mirai", "Mirai", new MiraiCommand());
++    }
++
++    @Override
++    public List<String> tabComplete(CommandSender sender, String alias, String[] args, Location location) throws IllegalArgumentException {
++        if (args.length == 1) {
++            return Stream.of("reload", "version")
++              .filter(arg -> arg.startsWith(args[0].toLowerCase()))
++              .collect(Collectors.toList());
++        }
++        return Collections.emptyList();
++    }
++
++    @Override
++    public boolean execute(CommandSender sender, String commandLabel, String[] args) {
++        if (!testPermission(sender)) return true;
++        String prefix = ChatColor.of("#12fff6") + "" + ChatColor.BOLD + "Mirai » " + ChatColor.of("#e8f9f9");
++
++        if (args.length != 1) {
++            sender.sendMessage(prefix + "Usage: " + usageMessage);
++            args = new String[]{"version"};
++        }
++
++        if (args[0].equalsIgnoreCase("reload")) {
++            MinecraftServer console = MinecraftServer.getServer();
++            try {
++                MiraiConfig.load();
++            } catch (IOException e) {
++                sender.sendMessage(Component.text("Failed to reload.", NamedTextColor.RED));
++                e.printStackTrace();
++                return true;
++            }
++            console.server.reloadCount++;
++
++            Command.broadcastCommandMessage(sender, prefix + "Mirai configuration has been reloaded.");
++        } else if (args[0].equalsIgnoreCase("version")) {
++            Command.broadcastCommandMessage(sender, prefix + "This server is running " + Bukkit.getName() + " version " + Bukkit.getVersion() + " (Implementing API version " + Bukkit.getBukkitVersion() + ")");
++        }
++
++        return true;
++    }
++}
+\ No newline at end of file
+diff --git a/src/main/java/dev/etil/mirai/MiraiConfig.java b/src/main/java/dev/etil/mirai/MiraiConfig.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..54cab7abec16b0c7155fc494f317119f17804d49
+--- /dev/null
++++ b/src/main/java/dev/etil/mirai/MiraiConfig.java
+@@ -0,0 +1,134 @@
++package dev.etil.mirai;
++
++import java.io.File;
++import java.io.IOException;
++import java.lang.reflect.Method;
++import java.lang.reflect.Modifier;
++import java.util.List;
++import net.minecraft.server.MinecraftServer;
++import org.apache.logging.log4j.Level;
++import org.bukkit.configuration.ConfigurationSection;
++import org.bukkit.configuration.MemoryConfiguration;
++import org.jetbrains.annotations.Nullable;
++import org.simpleyaml.configuration.comments.CommentType;
++import org.simpleyaml.configuration.file.YamlFile;
++import org.simpleyaml.exceptions.InvalidConfigurationException;
++
++public class MiraiConfig {
++
++    private static final YamlFile config = new YamlFile();
++    private static int updates = 0;
++
++    private static ConfigurationSection convertToBukkit(org.simpleyaml.configuration.ConfigurationSection section) {
++        ConfigurationSection newSection = new MemoryConfiguration();
++        for (String key : section.getKeys(false)) {
++            if (section.isConfigurationSection(key)) {
++                newSection.set(key, convertToBukkit(section.getConfigurationSection(key)));
++            } else {
++                newSection.set(key, section.get(key));
++            }
++        }
++        return newSection;
++    }
++
++    public static ConfigurationSection getConfigCopy() {
++        return convertToBukkit(config);
++    }
++
++    public static int getUpdates() {
++        return updates;
++    }
++
++    public static void load() throws IOException {
++        File configFile = new File("mirai.yml");
++
++        if (configFile.exists()) {
++            try {
++                config.load(configFile);
++            } catch (InvalidConfigurationException e) {
++                throw new IOException(e);
++            }
++        }
++
++        getString("info.version", "2.1");
++        setComment("info",
++                "Mirai Configuration",
++                "Join our Discord at https://discord.gg/DdH6Yfu9gM",
++                "Download new builds at https://ci.codemc.io/job/etil2jz/job/Mirai-1.19/lastSuccessfulBuild/");
++
++        for (Method method : MiraiConfig.class.getDeclaredMethods()) {
++            if (Modifier.isStatic(method.getModifiers()) && Modifier.isPrivate(method.getModifiers()) && method.getParameterCount() == 0 &&
++                    method.getReturnType() == Void.TYPE && !method.getName().startsWith("lambda")) {
++                method.setAccessible(true);
++                try {
++                    method.invoke(null);
++                } catch (Throwable t) {
++                    MinecraftServer.LOGGER.warn("Failed to load configuration option from " + method.getName(), t);
++                }
++            }
++        }
++
++        updates++;
++
++        config.save(configFile);
++    }
++
++    private static void setComment(String key, String... comment) {
++        if (config.contains(key)) {
++            config.setComment(key, String.join("\n", comment), CommentType.BLOCK);
++        }
++    }
++
++    private static void ensureDefault(String key, Object defaultValue, String... comment) {
++        if (!config.contains(key)) {
++            config.set(key, defaultValue);
++            config.setComment(key, String.join("\n", comment), CommentType.BLOCK);
++        }
++    }
++
++    private static boolean getBoolean(String key, boolean defaultValue, String... comment) {
++        return getBoolean(key, null, defaultValue, comment);
++    }
++
++    private static boolean getBoolean(String key, @Nullable String oldKey, boolean defaultValue, String... comment) {
++        ensureDefault(key, defaultValue, comment);
++        return config.getBoolean(key, defaultValue);
++    }
++
++    private static int getInt(String key, int defaultValue, String... comment) {
++        return getInt(key, null, defaultValue, comment);
++    }
++
++    private static int getInt(String key, @Nullable String oldKey, int defaultValue, String... comment) {
++        ensureDefault(key, defaultValue, comment);
++        return config.getInt(key, defaultValue);
++    }
++
++    private static double getDouble(String key, double defaultValue, String... comment) {
++        return getDouble(key, null, defaultValue, comment);
++    }
++
++    private static double getDouble(String key, @Nullable String oldKey, double defaultValue, String... comment) {
++        ensureDefault(key, defaultValue, comment);
++        return config.getDouble(key, defaultValue);
++    }
++
++    private static String getString(String key, String defaultValue, String... comment) {
++        return getOldString(key, null, defaultValue, comment);
++    }
++
++    private static String getOldString(String key, @Nullable String oldKey, String defaultValue, String... comment) {
++        ensureDefault(key, defaultValue, comment);
++        return config.getString(key, defaultValue);
++    }
++
++    private static List<String> getStringList(String key, List<String> defaultValue, String... comment) {
++        return getStringList(key, null, defaultValue, comment);
++    }
++
++    private static List<String> getStringList(String key, @Nullable String oldKey, List<String> defaultValue, String... comment) {
++        ensureDefault(key, defaultValue, comment);
++        return config.getStringList(key);
++    }
++
++}
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
+index 46858fb57f122033a68aeb4ad3943132a677fb46..c5428e3cc02ca879b566f19b0e4396ed6edcf68d 100644
+--- a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
++++ b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
+@@ -233,6 +233,8 @@ public class DedicatedServer extends MinecraftServer implements ServerInterface
+         gg.pufferfish.pufferfish.PufferfishConfig.pufferfishFile = (java.io.File) options.valueOf("pufferfish-settings"); // Purpur
+         gg.pufferfish.pufferfish.PufferfishConfig.load(); // Pufferfish
+         gg.pufferfish.pufferfish.PufferfishCommand.init(); // Pufferfish
++        dev.etil.mirai.MiraiConfig.load(); // Mirai
++        dev.etil.mirai.MiraiCommand.init(); // Mirai
+ 
+         this.setPvpAllowed(dedicatedserverproperties.pvp);
+         this.setFlightAllowed(dedicatedserverproperties.allowFlight);
