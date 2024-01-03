@@ -3,7 +3,6 @@ From: Pancakse <pancakseyt@gmail.com>
 Date: Tue, 2 Jan 2024 20:16:41 -0700
 Subject: [PATCH] IceCream Configuration
 
-This is modified config file by PurpurMC
 
 diff --git a/src/main/java/org/icecream/icecream/IceCreamCommand.java b/src/main/java/org/icecream/icecreaIceCreamreamCommand.java
 new file mode 100644
