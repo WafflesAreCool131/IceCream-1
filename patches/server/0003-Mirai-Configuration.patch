@@ -5,10 +5,10 @@ Subject: [PATCH] Mirai Configuration
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index 69a7dc227b396a774d8a8c361e86b498d40d7b61..0c151c51ca0ba7a5d6e0543e341c93bfceafd712 100644
+index fb8d575ef6b525b59e2c5ff08e58d5a3aa19787f..06bc33ef9ae4cc43496072c7bf6525c04d7b1552 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
-@@ -66,6 +66,15 @@ dependencies {
+@@ -64,6 +64,15 @@ dependencies {
      implementation("org.mozilla:rhino-engine:1.7.14") // Purpur
      implementation("dev.omega24:upnp4j:1.0") // Purpur
  
