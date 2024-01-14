@@ -58,7 +58,7 @@ index 0000000000000000000000000000000000000000..127b51d61ab6a4cfbdd8580216279aa1
 +    private static final HttpClient client = HttpClient.newHttpClient();
 +
 +    //private static final URI JENKINS_URI = URI.create("https://ci.purpurmc.org/Purpur/lastSuccessfulBuild/buildNumber"); // IceCream - Remove Jenkins fetcher
-+    private static final String GITHUB_FORMAT = "https://api.github.com/repos/IceCreamMC/IceCream/releases%s";
++    private static final String GITHUB_FORMAT = "https://api.github.com/repos/IceCreamMC/IceCream/releases";
 +
 +    private static final HttpResponse.BodyHandler<JsonObject> JSON_OBJECT_BODY_HANDLER = responseInfo -> HttpResponse.BodySubscribers
 +        .mapping(
