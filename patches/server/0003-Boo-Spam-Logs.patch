@@ -1,0 +1,47 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Pancakse <pancakseyt@gmail.com>
+Date: Sat, 13 Jan 2024 21:40:23 -0700
+Subject: [PATCH] Boo Spam Logs
+
+
+diff --git a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
+index eaf2cb361f5d700bea07986edd387d7fad1d27e2..04b5a34c60e50e0562136fe5f0e9717a8a3916ad 100644
+--- a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
++++ b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
+@@ -565,7 +565,7 @@ public class ServerGamePacketListenerImpl extends ServerCommonPacketListenerImpl
+ 
+                 if (d10 - d9 > Math.max(100.0D, Math.pow((double) (org.spigotmc.SpigotConfig.movedTooQuicklyMultiplier * (float) i * speed), 2)) && !this.isSingleplayerOwner()) {
+                 // CraftBukkit end
+-                    ServerGamePacketListenerImpl.LOGGER.warn("{} (vehicle of {}) moved too quickly! {},{},{}", new Object[]{entity.getName().getString(), this.player.getName().getString(), d6, d7, d8});
++                    // ServerGamePacketListenerImpl.LOGGER.warn("{} (vehicle of {}) moved too quickly! {},{},{}", new Object[]{entity.getName().getString(), this.player.getName().getString(), d6, d7, d8}); // IceCream - no spam logs
+                     this.send(new ClientboundMoveVehiclePacket(entity));
+                     return;
+                 }
+@@ -601,7 +601,7 @@ public class ServerGamePacketListenerImpl extends ServerCommonPacketListenerImpl
+ 
+                 if (d10 > org.spigotmc.SpigotConfig.movedWronglyThreshold) { // Spigot
+                     flag2 = true; // Paper - diff on change, this should be moved wrongly
+-                    ServerGamePacketListenerImpl.LOGGER.warn("{} (vehicle of {}) moved wrongly! {}", new Object[]{entity.getName().getString(), this.player.getName().getString(), Math.sqrt(d10)});
++                    // ServerGamePacketListenerImpl.LOGGER.warn("{} (vehicle of {}) moved wrongly! {}", new Object[]{entity.getName().getString(), this.player.getName().getString(), Math.sqrt(d10)}); // IceCream - no spam logs
+                 }
+                 Location curPos = this.getCraftPlayer().getLocation(); // Spigot
+ 
+@@ -1471,7 +1471,7 @@ public class ServerGamePacketListenerImpl extends ServerCommonPacketListenerImpl
+                                         io.papermc.paper.event.player.PlayerFailMoveEvent event = fireFailMove(io.papermc.paper.event.player.PlayerFailMoveEvent.FailReason.MOVED_TOO_QUICKLY,
+                                             toX, toY, toZ, toYaw, toPitch, true);
+                                         if (!event.isAllowed()) {
+-                                            if (event.getLogWarning())
++                                        if (false && event.getLogWarning()) // IceCream - no spam logs
+                                                 ServerGamePacketListenerImpl.LOGGER.warn("{} moved too quickly! {},{},{}", new Object[]{this.player.getName().getString(), d6, d7, d8});
+                                             this.teleport(this.player.getX(), this.player.getY(), this.player.getZ(), this.player.getYRot(), this.player.getXRot());
+                                             return;
+@@ -1547,7 +1547,7 @@ public class ServerGamePacketListenerImpl extends ServerCommonPacketListenerImpl
+                                     toX, toY, toZ, toYaw, toPitch, true);
+                                 if (!event.isAllowed()) {
+                                 flag2 = true; // Paper - diff on change, this should be moved wrongly
+-                                    if (event.getLogWarning())
++                                    if (false && event.getLogWarning()) // IceCream - no spam logs
+                                         ServerGamePacketListenerImpl.LOGGER.warn("{} moved wrongly!, ({})", this.player.getName().getString(), d11); // Purpur
+                                 }
+                                 // Paper end
+                                 
