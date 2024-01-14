@@ -3,6 +3,7 @@ From: Pancakse <pancakseyt@gmail.com>
 Date: Sat, 13 Jan 2024 21:40:23 -0700
 Subject: [PATCH] Boo Spam Logs
 
+Pancakse's Note: I only want 1 log for a player doing something like moved wrongly or moved to quickly and also uses less storage on logging
 
 diff --git a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
 index eaf2cb361f5d700bea07986edd387d7fad1d27e2..04b5a34c60e50e0562136fe5f0e9717a8a3916ad 100644
@@ -44,4 +45,3 @@ index eaf2cb361f5d700bea07986edd387d7fad1d27e2..04b5a34c60e50e0562136fe5f0e9717a
                                          ServerGamePacketListenerImpl.LOGGER.warn("{} moved wrongly!, ({})", this.player.getName().getString(), d11); // Purpur
                                  }
                                  // Paper end
-                                 
