@@ -19,142 +19,141 @@ index 6eeebfaf577263316f3562a8f968310acd616763..b6e65cfa61804a52e5e1e3709bfc7609
      @Override
 diff --git a/src/main/java/org/icecream/icecream/IceCreamVersionFetcher.java b/src/main/java/org/icecream/icecream/IceCreamVersionFetcher.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..eb0b2062aecb1dd7a6cc5fc70b7f7ad4fbebd9ad
---- /dev/null
+index 0000000000000000000000000000000000000000..127b51d61ab6a4cfbdd8580216279aa1241f75b2
+--- /org/null
 +++ b/src/main/java/org/icecream/icecream/IceCreamVersionFetcher.java
-@@ -0,0 +1,145 @@
+@@ -0,0 +1,144 @@
 +package org.icecream.icecream;
++
++import static net.kyori.adventure.text.Component.text;
++import static net.kyori.adventure.text.format.NamedTextColor.GREEN;
++import static net.kyori.adventure.text.format.NamedTextColor.RED;
 +
 +import com.destroystokyo.paper.VersionHistoryManager;
 +import com.destroystokyo.paper.util.VersionFetcher;
-+import com.google.common.base.Charsets;
-+import com.google.common.io.Resources;
 +import com.google.gson.Gson;
-+import com.google.gson.JsonArray;
 +import com.google.gson.JsonObject;
-+import com.google.gson.JsonSyntaxException;
++
++import java.io.IOException;
++import java.net.URI;
++import java.net.http.HttpClient;
++import java.net.http.HttpRequest;
++import java.net.http.HttpResponse;
++import java.nio.charset.StandardCharsets;
++import java.util.concurrent.TimeUnit;
++import java.util.logging.Level;
++import java.util.logging.Logger;
++
 +import net.kyori.adventure.text.Component;
-+import net.kyori.adventure.text.TextComponent;
-+import net.kyori.adventure.text.event.ClickEvent;
++import net.kyori.adventure.text.JoinConfiguration;
 +import net.kyori.adventure.text.format.NamedTextColor;
 +import net.kyori.adventure.text.format.TextDecoration;
-+
-+import javax.annotation.Nonnull;
-+import javax.annotation.Nullable;
-+import java.io.BufferedReader;
-+import java.io.IOException;
-+import java.io.InputStreamReader;
-+import java.net.HttpURLConnection;
-+import java.net.URL;
-+import java.util.stream.StreamSupport;
++import org.bukkit.craftbukkit.CraftServer;
++import org.jetbrains.annotations.NotNull;
++import org.jetbrains.annotations.Nullable;
 +
 +public class IceCreamVersionFetcher implements VersionFetcher {
-+    private static final java.util.regex.Pattern VER_PATTERN = java.util.regex.Pattern.compile("^([0-9\\.]*)\\-.*R"); // R is an anchor, will always give '-R' at end
-+    private static final String GITHUB_BRANCH_NAME = "main";
-+    private static final String DOWNLOAD_PAGE = "https://icecreammc.github.io";
-+    private static @javax.annotation.Nullable
-+    String mcVer;
++
++    private static final Logger LOGGER = Logger.getLogger("IceCreamVersionFetcher");
++    private static final HttpClient client = HttpClient.newHttpClient();
++
++    //private static final URI JENKINS_URI = URI.create("https://ci.purpurmc.org/Purpur/lastSuccessfulBuild/buildNumber"); // IceCream - Remove Jenkins fetcher
++    private static final String GITHUB_FORMAT = "https://api.github.com/repos/IceCreamMC/IceCream/releases%s";
++
++    private static final HttpResponse.BodyHandler<JsonObject> JSON_OBJECT_BODY_HANDLER = responseInfo -> HttpResponse.BodySubscribers
++        .mapping(
++            HttpResponse.BodySubscribers.ofString(StandardCharsets.UTF_8),
++            string -> new Gson().fromJson(string, JsonObject.class)
++        );
 +
 +    @Override
 +    public long getCacheTime() {
-+        return 720000;
++        return TimeUnit.MINUTES.toMillis(30);
 +    }
 +
-+    @Nonnull
 +    @Override
-+    public Component getVersionMessage(@Nonnull String serverVersion) {
-+        String[] parts = serverVersion.split("[-\\s]");
-+        final Component updateMessage = getUpdateStatusMessage("IceCreamMC/IceCream", GITHUB_BRANCH_NAME, parts[2]);
-+        final Component history = getHistory();
++    public @NotNull Component getVersionMessage(final @NotNull String serverVersion) {
++        final String[] parts = CraftServer.class.getPackage().getImplementationVersion().split("-");
++        @NotNull Component component;
 +
-+        return history != null ? Component.textOfChildren(updateMessage, Component.newline(), history) : updateMessage;
-+    }
++        if (parts.length != 3) {
++            component = text("Unknown server version.", RED);
++        } else {
++            final String versionString = parts[2];
 +
-+    private static @javax.annotation.Nullable
-+    String getMinecraftVersion() {
-+        return org.bukkit.Bukkit.getMinecraftVersion();
-+    }
-+
-+    private static Component getUpdateStatusMessage(@Nonnull String repo, @Nonnull String branch, @Nonnull String versionInfo) {
-+        int distance;
-+        try {
-+            int jenkinsBuild = Integer.parseInt(versionInfo);
-+            distance = fetchDistanceFromSiteApi(jenkinsBuild, getMinecraftVersion());
-+        } catch (NumberFormatException ignored) {
-+            versionInfo = versionInfo.replace("\"", "");
-+            distance = fetchDistanceFromGitHub(repo, branch, versionInfo);
++            component = this.fetchGithubVersion(versionString.substring(1, versionString.length() - 1));
++            // IceCream start - Remove Jenkins fetcher
++            //try {
++            //    component = this.fetchJenkinsVersion(Integer.parseInt(versionString));
++            //} catch (NumberFormatException e) {
++            //    component = this.fetchGithubVersion(versionString.substring(1, versionString.length() - 1));
++            //}
++            // IceCream end
 +        }
 +
-+        switch (distance) {
-+            case -1:
-+                return Component.text("Error obtaining version information", NamedTextColor.YELLOW);
-+            case 0:
-+                return Component.text("You are running the latest version", NamedTextColor.GREEN);
-+            case -2:
-+                return Component.text("Unknown version", NamedTextColor.YELLOW);
-+            default:
-+                return Component.text("You are " + distance + " version(s) behind", NamedTextColor.YELLOW)
-+                        .append(Component.newline())
-+                        .append(Component.text("Download the new version at: ")
-+                                .append(Component.text(DOWNLOAD_PAGE, NamedTextColor.GOLD)
-+                                        .hoverEvent(Component.text("Click to open", NamedTextColor.WHITE))
-+                                        .clickEvent(ClickEvent.openUrl(DOWNLOAD_PAGE))));
-+        }
++        final @Nullable Component history = this.getHistory();
++        return history != null ? Component
++            .join(JoinConfiguration.noSeparators(), component, Component.newline(), this.getHistory()) : component;
 +    }
 +
-+    private static int fetchDistanceFromSiteApi(int jenkinsBuild, @javax.annotation.Nullable String siteApiVersion) {
-+        if (siteApiVersion == null) { return -1; }
++    // IceCream start - Remove Jenkins fetcher
++    //private @NotNull Component fetchJenkinsVersion(final int versionNumber) {
++    //    final HttpRequest request = HttpRequest.newBuilder(JENKINS_URI).build();
++    //    try {
++    //        final HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
++    //        if (response.statusCode() != 200) {
++    //            return text("Received invalid status code (" + response.statusCode() + ") from server.", RED);
++    //        }
++    //
++    //        int latestVersionNumber;
++    //        try {
++    //            latestVersionNumber = Integer.parseInt(response.body());
++    //        } catch (NumberFormatException e) {
++    //            LOGGER.log(Level.WARNING, "Received invalid response from Jenkins \"" + response.body() + "\".");
++    //            return text("Received invalid response from server.", RED);
++    //        }
++    //
++    //        final int versionDiff = latestVersionNumber - versionNumber;
++    //        return this.getResponseMessage(versionDiff);
++    //    } catch (IOException | InterruptedException e) {
++    //        LOGGER.log(Level.WARNING, "Failed to look up version from Jenkins", e);
++    //        return text("Failed to retrieve version from server.", RED);
++    //    }
++    //}
++    // IceCream end
++
++    // Based off code contributed by Techcable <Techcable@outlook.com> in Paper/GH-65
++    private @NotNull Component fetchGithubVersion(final @NotNull String hash) {
++        final URI uri = URI.create(String.format(GITHUB_FORMAT, hash));
++        final HttpRequest request = HttpRequest.newBuilder(uri).build();
 +        try {
-+            try (BufferedReader reader = Resources.asCharSource(
-+                    new URL("https://api.github.com/repos/IceCreamMC/IceCream/releases" + siteApiVersion),
-+                    Charsets.UTF_8
-+            ).openBufferedStream()) {
-+                JsonObject json = new Gson().fromJson(reader, JsonObject.class);
-+                JsonArray builds = json.getAsJsonArray("builds");
-+                int latest = StreamSupport.stream(builds.spliterator(), false)
-+                        .mapToInt(e -> e.getAsInt())
-+                        .max()
-+                        .getAsInt();
-+                return latest - jenkinsBuild;
-+            } catch (JsonSyntaxException ex) {
-+                ex.printStackTrace();
-+                return -1;
++            final HttpResponse<JsonObject> response = client.send(request, JSON_OBJECT_BODY_HANDLER);
++            if (response.statusCode() != 200) {
++                return text("Received invalid status code (" + response.statusCode() + ") from server.", RED);
 +            }
-+        } catch (IOException e) {
-+            e.printStackTrace();
-+            return -1;
++
++            final JsonObject obj = response.body();
++            final int versionDiff = obj.get("behind_by").getAsInt();
++
++            return this.getResponseMessage(versionDiff);
++        } catch (IOException | InterruptedException e) {
++            LOGGER.log(Level.WARNING, "Failed to look up version from GitHub", e);
++            return text("Failed to retrieve version from server.", RED);
 +        }
 +    }
 +
-+    // Contributed by Techcable <Techcable@outlook.com> in GH-65
-+    private static int fetchDistanceFromGitHub(@Nonnull String repo, @Nonnull String branch, @Nonnull String hash) {
-+        try {
-+            HttpURLConnection connection = (HttpURLConnection) new URL("https://api.github.com/repos/" + repo + "/compare/" + branch + "..." + hash).openConnection();
-+            connection.connect();
-+            if (connection.getResponseCode() == HttpURLConnection.HTTP_NOT_FOUND) return -2; // Unknown commit
-+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), Charsets.UTF_8))) {
-+                JsonObject obj = new Gson().fromJson(reader, JsonObject.class);
-+                String status = obj.get("status").getAsString();
-+                switch (status) {
-+                    case "identical":
-+                        return 0;
-+                    case "behind":
-+                        return obj.get("behind_by").getAsInt();
-+                    default:
-+                        return -1;
-+                }
-+            } catch (JsonSyntaxException | NumberFormatException e) {
-+                e.printStackTrace();
-+                return -1;
-+            }
-+        } catch (IOException e) {
-+            e.printStackTrace();
-+            return -1;
-+        }
++    private @NotNull Component getResponseMessage(final int versionDiff) {
++        return switch (Math.max(-1, Math.min(1, versionDiff))) {
++            case -1 -> text("You are running an unsupported version of IceCream.", RED);
++            case 0 -> text("You are on the latest version!", GREEN);
++            default ->
++                text("You are running " + versionDiff + " version" + (versionDiff == 1 ? "" : "s") + " beyond. " +
++                        "Please update your server when possible to maintain stability, security, and receive the latest optimizations.",
++                    RED);
++        };
 +    }
 +
-+    @Nullable
-+    private Component getHistory() {
++    private @Nullable Component getHistory() {
 +        final VersionHistoryManager.VersionData data = VersionHistoryManager.INSTANCE.getVersionData();
 +        if (data == null) {
 +            return null;
