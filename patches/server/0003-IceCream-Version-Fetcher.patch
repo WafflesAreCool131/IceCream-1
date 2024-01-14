@@ -20,7 +20,7 @@ index 6eeebfaf577263316f3562a8f968310acd616763..b6e65cfa61804a52e5e1e3709bfc7609
 diff --git a/src/main/java/org/icecream/icecream/IceCreamVersionFetcher.java b/src/main/java/org/icecream/icecream/IceCreamVersionFetcher.java
 new file mode 100644
 index 0000000000000000000000000000000000000000..127b51d61ab6a4cfbdd8580216279aa1241f75b2
---- /org/null
+--- /dev/null
 +++ b/src/main/java/org/icecream/icecream/IceCreamVersionFetcher.java
 @@ -0,0 +1,144 @@
 +package org.icecream.icecream;
