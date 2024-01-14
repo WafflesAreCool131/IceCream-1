@@ -12,7 +12,7 @@ index 6eeebfaf577263316f3562a8f968310acd616763..b6e65cfa61804a52e5e1e3709bfc7609
  
      @Override
      public com.destroystokyo.paper.util.VersionFetcher getVersionFetcher() {
--        return new com.destroystokyo.paper.PaperVersionFetcher(); // Purpur
+-        /dev/null
 +        return new org.icecream.icecream.IceCreamVersionFetcher(); // Purpur // IceCream
      }
  
