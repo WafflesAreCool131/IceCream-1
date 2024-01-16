@@ -3,6 +3,7 @@ From: Pancakse <pancakseyt@gmail.com>
 Date: Sun, 14 Jan 2024 16:34:38 -0700
 Subject: [PATCH] IceCream Files
 
+This file contains the icecream config and command permissions is bukkit.command.icecream
 
 diff --git a/build.gradle.kts b/build.gradle.kts
 index 69a7dc227b396a774d8a8c361e86b498d40d7b61..0c151c51ca0ba7a5d6e0543e341c93bfceafd712 100644
@@ -261,3 +262,16 @@ index 0000000000000000000000000000000000000000..d4e242b74f77e29099421450ced16481
 +    }
 +
 +}
+diff --git a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
+index d21260dd1b7305949f063123b427dec1f5a00ae5..dbb0cb8babafb239921acc09899ab5664709e16e 100644
+--- a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
++++ b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
+@@ -235,6 +235,8 @@ public class DedicatedServer extends MinecraftServer implements ServerInterface
+         gg.pufferfish.pufferfish.PufferfishConfig.load(); // Pufferfish
+         gg.pufferfish.pufferfish.PufferfishCommand.init(); // Pufferfish
+ 
++        org.icecream.icecream.IceCreamConfig.load(); // IceCream
++        org.icecream.icecream.IceCreamCommand.init(); // IceCream
+         this.setPvpAllowed(dedicatedserverproperties.pvp);
+         this.setFlightAllowed(dedicatedserverproperties.allowFlight);
+         this.setMotd(dedicatedserverproperties.motd);
