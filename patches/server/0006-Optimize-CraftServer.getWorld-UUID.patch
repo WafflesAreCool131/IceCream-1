@@ -6,7 +6,7 @@ Subject: [PATCH] Optimize CraftServer.getWorld(UUID)
 Patch from MultiPaper which is licensed under GPL 3.0
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index e8d51c5bb10980faa9593c6f55d3962efadb7e7d..73f95507962781c11138d693a6ba7d8fd5b940bf 100644
+index 5b1fe9671d2850a2dd13d6c24e4b940080676da0..75cb0fe7fda2768be1032317d11b8a8e84f8b20c 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -44,6 +44,8 @@ import java.util.logging.Level;
