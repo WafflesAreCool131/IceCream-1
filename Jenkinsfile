@@ -35,7 +35,7 @@ pipeline {
   }
   post {
     success {
-      archiveArtifacts(artifacts: 'build/libs/**/sharkur-paperclip-*.jar', fingerprint: true)
+      archiveArtifacts(artifacts: 'build/libs/**/icecream-paperclip-*.jar', fingerprint: true)
     }
     always {
       discordSend(description: "**Build:** ${env.BUILD_ID}\n**Status:** ${currentBuild.currentResult}", link: env.BUILD_URL, result: currentBuild.currentResult, title: "Sharkur #${env.BUILD_ID}", webhookURL: "$DISCORD_WEBHOOK")
