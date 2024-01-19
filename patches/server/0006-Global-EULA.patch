@@ -1,0 +1,63 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Pancakse <pancakseyt@gmail.com>
+Date: Thu, 18 Jan 2024 18:11:21 -0700
+Subject: [PATCH] Global EULA
+
+Allows server owners to user a single global EULA file
+
+diff --git a/src/main/java/net/minecraft/server/Main.java b/src/main/java/net/minecraft/server/Main.java
+index f8d1631b274751a60d429f847ca7689e17adf1a2..12631a7174fdb9b8792caf0fb76cbbae2553ba7a 100644
+--- a/src/main/java/net/minecraft/server/Main.java
++++ b/src/main/java/net/minecraft/server/Main.java
+@@ -142,7 +142,7 @@ public class Main {
+             DedicatedServerSettings dedicatedserversettings = new DedicatedServerSettings(optionset); // CraftBukkit - CLI argument support
+ 
+             dedicatedserversettings.forceSave();
+-            Path path2 = Paths.get("eula.txt");
++            Path path2 = Paths.get(dedicatedserversettings.getProperties().useGlobalEula ? dedicatedserversettings.getProperties().globalEulaPath : "eula.txt"); // IceCream - Global EULA
+             Eula eula = new Eula(path2);
+             // Paper start - load config files for access below if needed
+             org.bukkit.configuration.file.YamlConfiguration bukkitConfiguration = io.papermc.paper.configuration.PaperConfigurations.loadLegacyConfigFile((File) optionset.valueOf("bukkit-settings"));
+@@ -180,7 +180,15 @@ public class Main {
+                 Main.LOGGER.info("You need to agree to the EULA in order to run the server. Go to eula.txt for more info.");
+                 return;
+             }
+-
++            // IceCream start - Global EULA
++            if (dedicatedserversettings.getProperties().useGlobalEula) {
++                Main.LOGGER.warn("");
++                Main.LOGGER.warn("You are using IceCream's global EULA feature.");
++                Main.LOGGER.warn("By using this setting you are indicating your agreement to Mojang's EULA (https://account.mojang.com/documents/minecraft_eula).");
++                Main.LOGGER.warn("If you do not agree to the above EULA please stop your server and disable the feature immediately.");
++                Main.LOGGER.warn("");
++            }
++            // IceCream end - Global EULA
+             // Paper start - Warn on headless
+             String awtException = io.papermc.paper.util.ServerEnvironment.awtDependencyCheck();
+             if (awtException != null) {
+diff --git a/src/main/java/net/minecraft/server/dedicated/DedicatedServerProperties.java b/src/main/java/net/minecraft/server/dedicated/DedicatedServerProperties.java
+index 1ea3012995c738c67b31e997c138f824f9e69ba1..a8dbacde957228dda9d0faa09a67a3f6ac3c05c6 100644
+--- a/src/main/java/net/minecraft/server/dedicated/DedicatedServerProperties.java
++++ b/src/main/java/net/minecraft/server/dedicated/DedicatedServerProperties.java
+@@ -110,6 +110,10 @@ public class DedicatedServerProperties extends Settings<DedicatedServerPropertie
+     public final WorldOptions worldOptions;
+ 
+     public final String rconIp; // Paper - Add rcon ip
++    // IceCream start - Global EULA
++    public final boolean useGlobalEula;
++    public final String globalEulaPath;
++    // IceCream end - Global EULA
+ 
+     // CraftBukkit start
+     public DedicatedServerProperties(Properties properties, OptionSet optionset) {
+@@ -172,6 +176,10 @@ public class DedicatedServerProperties extends Settings<DedicatedServerPropertie
+         final String rconIp = this.getStringRaw("rcon.ip");
+         this.rconIp = rconIp == null ? this.serverIp : rconIp;
+         // Paper end
++        // IceCream start - Global EULA
++        this.useGlobalEula = get("use-global-eula", false);
++        this.globalEulaPath = get("global-eula-path", System.getProperty("user.home") + java.io.File.separator + "GlobalEula.txt");
++        // IceCream end - Global EULA
+     }
+ 
+     // CraftBukkit start
