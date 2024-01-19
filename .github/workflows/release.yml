@@ -1,4 +1,4 @@
-name: Release IceCream (1.20.4)
+name: Release IcecREAM (1.20.4)
 
 on:
   push:
@@ -41,7 +41,7 @@ jobs:
       - name: Set up GraalVM ${{ matrix.base_jdk }}
         uses: graalvm/setup-graalvm@v1
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.TOKEN }}
           java-version: ${{ matrix.base_jdk }}
           version: latest
           cache: 'gradle'
@@ -52,15 +52,20 @@ jobs:
       - name: Apply Patches
         run: ./gradlew applyPatches --stacktrace
 
+      - name: Build
+        run: ./gradlew build --stacktrace
+
       - name: Create Reobf Jar
         run: ./gradlew createReobfPaperclipJar --stacktrace
 
+      - name: Create Mojmap Jar
+        run: ./gradlew createMojmapPaperclipJar --stacktrace
 
       - name: Update Javadoc
         continue-on-error: true
         if: github.ref_name == env.MAIN_BRANCH
         run: |
-          (cd Plazma-API/build/docs/javadoc && tar c .) | (cd javadoc && tar xf -)
+          (cd IceCream-API/build/docs/javadoc && tar c .) | (cd javadoc && tar xf -)
           cd javadoc
           git add . && git commit -m "Update Javadocs"
           git push
@@ -69,7 +74,7 @@ jobs:
         if: github.ref_name == env.MAIN_BRANCH
         run: |
           export GITHUB_USERNAME=${{ env.ORG_NAME }}
-          export TOKEN=${{ secrets.TOKEN }}
+          export GITHUB_TOKEN=${{ secrets.TOKEN }}
           ./gradlew publish --stacktrace
 
       - name: Upload Artifacts
