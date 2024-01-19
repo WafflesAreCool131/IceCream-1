@@ -31,7 +31,7 @@ jobs:
         if: github.ref_name == env.MAIN_BRANCH
         with:
           repository: IceCreamMC/javadocs
-          path: javadoc
+          path: main
           ref: main
           token: ${{ secrets.TOKEN }}
 
