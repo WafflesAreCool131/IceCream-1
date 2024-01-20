@@ -53,5 +53,4 @@ If you modify IceCream or just wanna build it your self here are the steps
 
 
 # Patches Credits
-## Mirai - for c2me and VMP
-## EmpireCraft - for log utils
+## [MultiPaper](https://github.com/MultiPaper/MultiPaper/)
