@@ -48,8 +48,8 @@ jobs:
       - name: Push To API
         continue-on-error: true
         if: "!contains(github.event.commits[0].message, '[release-skip]')"
-          env:
+        env:
           secret: ${{ secrets.API_PUSH_TOKEN }}
           tag: ${{ env.tag }}
         run: sh scripts/PushToAPI.sh
-        
+
