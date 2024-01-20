@@ -45,3 +45,10 @@ jobs:
           embed-url: "https://github.com/icecreammc/icecream/latest/releases"
           embed-description: "IceCreamMC has published a new update! Click [here](https://icecreammc.github.io/icecream/download) to download IceCreamMC!"
           embed-thumbnail-url: "https://avatars.githubusercontent.com/u/153784457?s=200&v=4"
+      - name: Push To API
+        continue-on-error: true
+        if: "!contains(github.event.commits[0].message, '[release-skip]')"
+        env:
+          secret: ${{ secrets.API_PUSH_TOKEN }}
+        tag: ${{ env.tag }}
+      run: sh scripts/PushToAPI.sh
