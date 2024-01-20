@@ -81,7 +81,6 @@ paperweight {
             serverPatchDir = layout.projectDirectory.dir("patches/server")
             serverOutputDir = layout.projectDirectory.dir("IceCream-Server")
         }
-        }
     }
 }
 
