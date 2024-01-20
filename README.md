@@ -23,14 +23,14 @@ Like CPU and RAM
 ## No Spam Logs
 Saves storage with reducing the ammount of logs that are send
 
-# Self Buidling
+# Self Building
 If you modify IceCream or just wanna build it your self here are the steps
 
-## Requirements
+## Requirements for building
 1. RAM: We recommend having 16GB+ of RAM or your pc will freeze
 2. CPU: Atleast 4 cores+ Deff not a Celeron or a Platinum or a AMD A4
 3. Storage: Atleast 4GB+
-4. Git: You will need Git if your buiding
+4. Git: You will need Git if your building
 
 
 ## Steps
