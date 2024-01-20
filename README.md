@@ -18,10 +18,16 @@
 </div>
 
 # Features
-## Adds Patches From Mirai For Optimizations
-Like CPU and RAM
-## No Spam Logs
-Saves storage with reducing the ammount of logs that are send
+## Optimizations
+
+
+# Recommended Requirements For Running
+1. RAM: Atleast 2GB of RAM
+2. CPU Cores: Atleast 2 or More
+3. CPU: Fairly Decent (Deff not a low end of have fun with not responding)
+4. Java Version: 17 or Above is recommended 
+6. Pancakes (jk)
+
 
 # Self Building
 If you modify IceCream or just wanna build it your self here are the steps
@@ -31,6 +37,7 @@ If you modify IceCream or just wanna build it your self here are the steps
 2. CPU: Atleast 4 cores+ Deff not a Celeron or a Platinum or a AMD A4
 3. Storage: Atleast 4GB+
 4. Git: You will need Git if your building
+5. Java JDK
 
 
 ## Steps
