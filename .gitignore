@@ -55,5 +55,4 @@ build-data/
 IceCream-API
 IceCream-MojangAPI
 IceCream-Server
-paper-api-generation/*
 *.jar
