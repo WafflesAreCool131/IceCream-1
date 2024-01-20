@@ -52,3 +52,4 @@ jobs:
           secret: ${{ secrets.API_PUSH_TOKEN }}
           tag: ${{ env.tag }}
         run: sh scripts/PushToAPI.sh
+        
