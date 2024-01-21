@@ -25,7 +25,7 @@
 1. RAM: Atleast 2GB of RAM
 2. CPU Cores: Atleast 2 or More
 3. CPU: Fairly Decent (Deff not a low end of have fun with not responding)
-4. Java Version: 17 or Above is recommended 
+4. Java Version: 17 or Above is required 
 6. Pancakes (jk)
 
 
