@@ -7,10 +7,10 @@ Original Patch Found On Multipaper Which Is Licensed Under The MIT
 Remodified By Pancakse
 
 diff --git a/src/main/java/net/minecraft/commands/synchronization/ArgumentTypeInfos.java b/src/main/java/net/minecraft/commands/synchronization/ArgumentTypeInfos.java
-index 7dd1c710267db2b299442ca4be33046328d18091..ee9f7bb0e3db19dda3e6300a0a6670e558314cd7 100644
+index 0f43466df9b6a59722d5c311b9bd02f59ac75539..5ddab918303c180c134225b61b11964a13e7989c 100644
 --- a/src/main/java/net/minecraft/commands/synchronization/ArgumentTypeInfos.java
 +++ b/src/main/java/net/minecraft/commands/synchronization/ArgumentTypeInfos.java
-@@ -127,8 +127,8 @@ public class ArgumentTypeInfos {
+@@ -129,8 +129,8 @@ public class ArgumentTypeInfos {
          return register(registry, "uuid", UuidArgument.class, SingletonArgumentInfo.contextFree(UuidArgument::uuid));
      }
  
@@ -21,7 +21,7 @@ index 7dd1c710267db2b299442ca4be33046328d18091..ee9f7bb0e3db19dda3e6300a0a6670e5
      }
  
      public static boolean isClassRecognized(Class<?> clazz) {
-@@ -140,7 +140,7 @@ public class ArgumentTypeInfos {
+@@ -142,7 +142,7 @@ public class ArgumentTypeInfos {
          if (argumentTypeInfo == null) {
              throw new IllegalArgumentException(String.format(Locale.ROOT, "Unrecognized argument type %s (%s)", argumentType, argumentType.getClass()));
          } else {
