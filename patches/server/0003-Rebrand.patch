@@ -5,7 +5,7 @@ Subject: [PATCH] Rebrand
 
 
 diff --git a/src/main/java/com/destroystokyo/paper/Metrics.java b/src/main/java/com/destroystokyo/paper/Metrics.java
-index 8cde30544e14f8fc2dac32966ae3c21f8cf3a551..a186dea733a8db43c429a67a6dbb66121b8f1b8c 100644
+index 8cde30544e14f8fc2dac32966ae3c21f8cf3a551..3a2afaf94954e690d38de6d570fe722425a72e44 100644
 --- a/src/main/java/com/destroystokyo/paper/Metrics.java
 +++ b/src/main/java/com/destroystokyo/paper/Metrics.java
 @@ -593,7 +593,7 @@ public class Metrics {
@@ -27,7 +27,7 @@ index 8cde30544e14f8fc2dac32966ae3c21f8cf3a551..a186dea733a8db43c429a67a6dbb6612
                  metrics.addCustomChart(new Metrics.DrilldownPie("java_version", () -> {
                      Map<String, Map<String, Integer>> map = new HashMap<>();
 diff --git a/src/main/java/com/destroystokyo/paper/console/PaperConsole.java b/src/main/java/com/destroystokyo/paper/console/PaperConsole.java
-index 3cb56595822799926a8141e60a42f5d1edfc6de5..6db7517011ac94532751a88db951d28d8f81735f 100644
+index 3cb56595822799926a8141e60a42f5d1edfc6de5..e89101ea2c833c051a6b0ef9b0e50b65708bb465 100644
 --- a/src/main/java/com/destroystokyo/paper/console/PaperConsole.java
 +++ b/src/main/java/com/destroystokyo/paper/console/PaperConsole.java
 @@ -17,7 +17,7 @@ public final class PaperConsole extends SimpleTerminalConsole {
@@ -39,6 +39,32 @@ index 3cb56595822799926a8141e60a42f5d1edfc6de5..6db7517011ac94532751a88db951d28d
                  .variable(LineReader.HISTORY_FILE, java.nio.file.Paths.get(".console_history"))
                  .completer(new ConsoleCommandCompleter(this.server))
                  .option(LineReader.Option.COMPLETE_IN_WORD, true);
+diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
+index 6f94f01da0a2294f6fdc564653dde1fdbf508153..221912cf4baf6585e62b82e1b7319fe0b497e9a0 100644
+--- a/src/main/java/net/minecraft/server/MinecraftServer.java
++++ b/src/main/java/net/minecraft/server/MinecraftServer.java
+@@ -959,7 +959,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+         shutdownThread = Thread.currentThread();
+         org.spigotmc.WatchdogThread.doStop(); // Paper
+         if (!isSameThread()) {
+-            MinecraftServer.LOGGER.info("Stopping main thread (Ignore any thread death message you see! - DO NOT REPORT THREAD DEATH TO PURPUR)"); // Purpur
++            MinecraftServer.LOGGER.info("Stopping main thread (Ignore any thread death message you see! - DO NOT REPORT THREAD DEATH TO ICECREAM)"); // Purpur // IceCream
+             while (this.getRunningThread().isAlive()) {
+                 this.getRunningThread().stop();
+                 try {
+diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
+index fd754fc9ff313421d221eea8d21fbde98be24914..9dfee38e6e65e34b11f1875f23c5c330977bb670 100644
+--- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
++++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
+@@ -264,7 +264,7 @@ import javax.annotation.Nullable; // Paper
+ import javax.annotation.Nonnull; // Paper
+ 
+ public final class CraftServer implements Server {
+-    private final String serverName = "Purpur"; // Paper // Pufferfish // Purpur
++    private final String serverName = "IceCream"; // Paper // Pufferfish // Purpur // IceCream
+     private final String serverVersion;
+     private final String bukkitVersion = Versioning.getBukkitVersion();
+     private final Logger logger = Logger.getLogger("Minecraft");
 diff --git a/src/main/java/org/purpurmc/purpur/PurpurConfig.java b/src/main/java/org/purpurmc/purpur/PurpurConfig.java
 index e9fc2b4661f5275b93db5d3fdf25a8bdc3b38920..3f71a801e4522d5bb7d58fe5d21021e6f1d76d75 100644
 --- a/src/main/java/org/purpurmc/purpur/PurpurConfig.java
@@ -52,32 +78,6 @@ index e9fc2b4661f5275b93db5d3fdf25a8bdc3b38920..3f71a801e4522d5bb7d58fe5d21021e6
      private static void serverModName() {
          serverModName = getString("settings.server-mod-name", serverModName);
      }
-diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index f69976dcba060027c67c2e1b49fa28d3f28f66f0..50be99ebd55fad268e5aeba1fbac2f8dee1b58da 100644
---- a/src/main/java/net/minecraft/server/MinecraftServer.java
-+++ b/src/main/java/net/minecraft/server/MinecraftServer.java
-@@ -959,7 +959,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
-         shutdownThread = Thread.currentThread();
-         org.spigotmc.WatchdogThread.doStop(); // Paper
-         if (!isSameThread()) {
--            MinecraftServer.LOGGER.info("Stopping main thread (Ignore any thread death message you see! - DO NOT REPORT THREAD DEATH TO PURPUR)"); // Purpur
-+            MinecraftServer.LOGGER.info("Stopping main thread (Ignore any thread death message you see! - DO NOT REPORT THREAD DEATH TO ICECREAM)"); // Purpur // IceCream
-             while (this.getRunningThread().isAlive()) {
-                 this.getRunningThread().stop();
-                 try {
-diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index aef22db014c81332ba599ddb931afb264dc12a84..c55e428c46705e7fa99022fd2bf6dc81074e9b1e 100644
---- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-+++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -264,7 +264,7 @@ import javax.annotation.Nullable; // Paper
- import javax.annotation.Nonnull; // Paper
- 
- public final class CraftServer implements Server {
--    private final String serverName = "Purpur"; // Paper // Pufferfish // Purpur
-+    private final String serverName = "IceCream"; // Paper // Pufferfish // Purpur // IceCream
-     private final String serverVersion;
-     private final String bukkitVersion = Versioning.getBukkitVersion();
-     private final Logger logger = Logger.getLogger("Minecraft");
 diff --git a/src/main/java/org/spigotmc/WatchdogThread.java b/src/main/java/org/spigotmc/WatchdogThread.java
 index 5fc8cc40ab627eba0b2110c73d31af213a935733..70f881600652c9179b764401ed5b358e04fa922f 100644
 --- a/src/main/java/org/spigotmc/WatchdogThread.java

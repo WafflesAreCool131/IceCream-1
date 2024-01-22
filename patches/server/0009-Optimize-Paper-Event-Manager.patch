@@ -8,7 +8,7 @@ Link: https://github.com/lynxplay/ktp
 Modified by Pancakse
 
 diff --git a/src/main/java/io/papermc/paper/plugin/manager/PaperEventManager.java b/src/main/java/io/papermc/paper/plugin/manager/PaperEventManager.java
-index 7ce9ebba8ce304d1f3f21d4f15ee5f3560d7700b..0e3bed7a75f8f4611f9f44a1f78fd70cc06eaa54 100644
+index 7ce9ebba8ce304d1f3f21d4f15ee5f3560d7700b..72cabafe6ee73ce939a1cbfeb749bb9479e69704 100644
 --- a/src/main/java/io/papermc/paper/plugin/manager/PaperEventManager.java
 +++ b/src/main/java/io/papermc/paper/plugin/manager/PaperEventManager.java
 @@ -36,14 +36,21 @@ class PaperEventManager {
