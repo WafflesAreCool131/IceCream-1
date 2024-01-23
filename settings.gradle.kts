@@ -14,7 +14,7 @@ plugins {
 
 rootProject.name = "icecream"
 
-for (name in listOf("IceCream-API", "IceCream-Server, paper-api-generator")) {
+for (name in listOf("IceCream-API", "IceCream-Server")) {
     val projName = name.lowercase(Locale.ENGLISH)
     include(projName)
     findProject(":$projName")!!.projectDir = file(name)
