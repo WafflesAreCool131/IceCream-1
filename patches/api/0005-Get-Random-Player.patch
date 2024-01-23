@@ -1,6 +1,6 @@
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: MrFishCakes <FinlayOxby@outlook.com>
-Date: Tue, 5 Sep 2023 20:25:57 +0100
+From: Pancakse <pancakseyt@gmail.com>
+Date: Mon,  Sep 2023 20:25:57 +0100
 Subject: [PATCH] Get Random Player
 
 Adds a method to fetch a random online player
