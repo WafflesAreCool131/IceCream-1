@@ -1,0 +1,43 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: MrFishCakes <FinlayOxby@outlook.com>
+Date: Tue, 5 Sep 2023 20:25:57 +0100
+Subject: [PATCH] Get Random Player
+
+Adds a method to fetch a random online player
+
+diff --git a/src/main/java/org/bukkit/Bukkit.java b/src/main/java/org/bukkit/Bukkit.java
+index 109304f8064ab2fab57f9c0f1745e446e6748b3d..7ea51db7e3097082cbec321e6800e4883c3bac87 100644
+--- a/src/main/java/org/bukkit/Bukkit.java
++++ b/src/main/java/org/bukkit/Bukkit.java
+@@ -2965,4 +2965,14 @@ public final class Bukkit {
+         server.clearBlockHighlights();
+     }
+     // Purpur end
++    // IceCream start - Get Random Player
++    /**
++     * Get a random player on the server
++     *
++     * @return A random online player or null if nobody is online
++     */
++    public static @Nullable Player getRandomPlayer() {
++        return server.getRandomPlayer();
++    }
++    // IceCream end - Get Random Player
+ }
+diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
+index badf1eaa02bc6462d134b7a912f3afd7e7404c64..6636facfe15fade35cd00bc721b2dc9b8267cbb6 100644
+--- a/src/main/java/org/bukkit/Server.java
++++ b/src/main/java/org/bukkit/Server.java
+@@ -2601,4 +2601,12 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
+      */
+     void clearBlockHighlights();
+     // Purpur end
++    // IceCream start - Get Random Player
++    /**
++     * Get a random player on the server
++     *
++     * @return A random online player or null if nobody is online
++     */
++    @Nullable Player getRandomPlayer();
++    // IceCream end - Get Random Player
+ }

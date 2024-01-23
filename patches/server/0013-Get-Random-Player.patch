@@ -1,0 +1,23 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: MrFishCakes <FinlayOxby@outlook.com>
+Date: Tue, 5 Sep 2023 20:26:50 +0100
+Subject: [PATCH] Get Random Player
+
+Adds a method to fetch a random online player
+
+diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
+index 156fb6067e9ecd42062fb03c81586449b2320ec4..59ebaf7b950226f01363b017cd68623bfcce8262 100644
+--- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
++++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
+@@ -3334,4 +3334,11 @@ public final class CraftServer implements Server {
+         return getServer().lagging;
+     }
+     // Purpur end
++    // IceCream start - Get Random Player
++    public Player getRandomPlayer() {
++        if (getOnlinePlayers().isEmpty()) return null;
++
++        return getOnlinePlayers().get(new java.util.Random().nextInt(getOnlinePlayers().size()));
++    }
++    // IceCream end - Get Random Player
+ }
