@@ -1,0 +1,40 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Pancakse <pancakseyt@gmail.com>
+Date: Tue, 23 Jan 2024 16:18:17 -0700
+Subject: [PATCH] Implement Secure Seed
+
+
+diff --git a/src/main/java/net/minecraft/server/dedicated/DedicatedServerProperties.java b/src/main/java/net/minecraft/server/dedicated/DedicatedServerProperties.java
+index d53e0b67d847dfec2f4b118b5ca3f0ed1dc29ad6..33d47be4384dc84e017a1b39ad09efaa7991bf91 100644
+--- a/src/main/java/net/minecraft/server/dedicated/DedicatedServerProperties.java
++++ b/src/main/java/net/minecraft/server/dedicated/DedicatedServerProperties.java
+@@ -48,6 +48,10 @@ import org.slf4j.Logger;
+ import joptsimple.OptionSet;
+ // CraftBukkit end
+ 
++// IceCream start - Feature Secure Seed
++import org.icecream.icecream.Globals;
++// IceCream end - Feature Secure Seed
++
+ public class DedicatedServerProperties extends Settings<DedicatedServerProperties> {
+ 
+     static final Logger LOGGER = LogUtils.getLogger();
+@@ -161,7 +165,17 @@ public class DedicatedServerProperties extends Settings<DedicatedServerPropertie
+         boolean flag = this.get("generate-structures", true);
+         long i = WorldOptions.parseSeed(s).orElse(WorldOptions.randomSeed());
+ 
+-        this.worldOptions = new WorldOptions(i, flag, false);
++        // IceCream start - Feature Secure Seed
++        String featureSeedString = this.get("feature-level-seed", "");
++        long[] featureSeed;
++        if (featureSeedString.isEmpty()) {
++            featureSeed = Globals.createRandomWorldSeed();
++        } else {
++            featureSeed = Globals.parseSeed(featureSeedString).orElseGet(Globals::createRandomWorldSeed);
++        }
++
++        this.worldOptions = new WorldOptions(i, featureSeed, flag, false);
++        // IceCream end - Feature Secure Seed
+         this.worldDimensionData = new DedicatedServerProperties.WorldDimensionData((JsonObject) this.get("generator-settings", (s1) -> {
+             return GsonHelper.parse(!s1.isEmpty() ? s1 : "{}");
+         }, new JsonObject()), (String) this.get("level-type", (s1) -> {
