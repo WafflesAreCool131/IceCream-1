@@ -61,3 +61,8 @@ If you modify IceCream or just wanna build it your self here are the steps
 
 # Patches Credits
 ## [MultiPaper](https://github.com/MultiPaper/MultiPaper/)
+
+
+
+# bStats
+[![bStats](https://bstats.org/signatures/server-implementation/IceCreamMC.svg)](https://bstats.org/plugin/server-implementation/IceCreamMC/20724)
