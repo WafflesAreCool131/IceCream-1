@@ -1,0 +1,26 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Pancakse <pancakseyt@gmail.com>
+Date: Fri, 26 Jan 2024 23:49:52 -0700
+Subject: [PATCH] IceCream API publish
+
+
+diff --git a/build.gradle.kts b/build.gradle.kts
+index 0a33275fdf16bda47771bab9ddfeb2bf8616c2dc..f1f7e0b0a89491621b2c8558dcda21daf9f51171 100644
+--- a/build.gradle.kts
++++ b/build.gradle.kts
+@@ -209,3 +209,14 @@ tasks.check {
+     dependsOn(scanJarForOldGeneratedCode)
+ }
+ // Paper end
++
++// IceCream start - publish api
++publishing {
++    repositories {
++        maven("http://135.181.141.62:4038/") {
++            name = "icecream"
++            credentials(PasswordCredentials::class)
++        }
++    }
++}
++// IceCream end - publish api
+\ No newline at end of file
