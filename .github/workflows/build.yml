@@ -52,4 +52,10 @@ jobs:
           secret: ${{ secrets.API_PUSH_TOKEN }}
           tag: ${{ env.tag }}
         run: sh scripts/PushToAPI.sh
+      - name: Publish with Gradle
+        continue-on-error: true
+        run: ./gradlew build publish
+        env:
+          MAVEN_NAME: ${{ secrets.MAVEN_NAME }} # token name
+          MAVEN_SECRET: ${{ secrets.MAVEN_SECRET }} # token secret (password)
 
