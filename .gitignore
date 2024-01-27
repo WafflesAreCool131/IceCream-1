@@ -51,7 +51,7 @@ manifest.mf
 # other stuff
 run/
 
-build-data/
+
 IceCream-API
 IceCream-MojangAPI
 IceCream-Server
