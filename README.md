@@ -61,6 +61,7 @@ If you modify IceCream or just wanna build it your self here are the steps
 
 # Patches Credits
 ## [MultiPaper](https://github.com/MultiPaper/MultiPaper/)
+## [Sharkur](https://www.github.com/SharkurMC/Sharkur)
 
 
 
