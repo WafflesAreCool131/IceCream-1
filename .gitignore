@@ -55,5 +55,6 @@ run/
 IceCream-API
 IceCream-MojangAPI
 IceCream-Server
+IceCream-Launcher
 paper-api-generator
 *.jar
