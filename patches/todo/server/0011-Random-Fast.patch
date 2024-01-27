@@ -4,11 +4,11 @@ Date: Sun, 21 Jan 2023 20:39:13 -0700
 Subject: [PATCH] Random Fast
 
 
-diff --git a/src/main/java/org/icecream/icecream/utils/RandomFast.java b/src/main/java/org/icecream/icecream/utils/RandomFast.java
+diff --git a/src/main/java/org/icecream/icecream/util/RandomFast.java b/src/main/java/org/icecream/icecream/util/RandomFast.java
 new file mode 100644
 index 0000000000000000000000000000000000000000..a9b3a467e7dbfdc78c11f04e6bb5a9642c20470c
 --- /dev/null
-+++ b/src/main/java/org/icecream/icecream/utils/RandomFast.java
++++ b/src/main/java/org/icecream/icecream/util/RandomFast.java
 @@ -0,0 +1,395 @@
 +/**
 + * This is a faster implementation of java.util.Random.
@@ -23,7 +23,7 @@ index 0000000000000000000000000000000000000000..a9b3a467e7dbfdc78c11f04e6bb5a964
 + * http://www.codeproject.com/Articles/9187/A-fast-equivalent-for-System-Random.
 + */
 +
-+package org.icecream.icecream.utils;
++package org.icecream.icecream.util;
 +
 +@SuppressWarnings("SuspiciousNameCombination")
 +public class FastRandom extends java.util.Random {
@@ -432,7 +432,7 @@ index 09e357833f9bbe26da7fa7142875daf2733d6420..2850b4fac2bf28b751cd6412e2effb99
  import net.minecraft.world.ticks.TickContainerAccess;
  import org.slf4j.Logger;
 +// IceCream start
-+import org.icecream.icecream.utils.RandomFast;
++import org.icecream.icecream.util.RandomFast;
 +import java.util.Random; // IceCream
 +// IceCream end
  
@@ -455,7 +455,7 @@ index dcfe090c269d4cbcc2eb1b6f85392848bb34656c..ef8909c9c13c8f46ec6d452f0d14c9a1
  import net.minecraft.nbt.NbtIo;
  import net.minecraft.world.level.ChunkPos;
  import org.slf4j.Logger;
-+import org.icecream.icecream.utils.RandomFast; // IceCream
++import org.icecream.icecream.util.RandomFast; // IceCream
  
  public class RegionFile implements AutoCloseable {
  
@@ -476,7 +476,7 @@ index 069bb67d1f79e63dce85cba347a1fd67a4781043..840657e9fa7adaa20753b54d86a68d83
  import org.bukkit.util.RayTraceResult;
  import org.bukkit.util.StructureSearchResult;
  import org.bukkit.util.Vector;
-+import org.icecream.icecream.utils.RandomFast; // IceCream
++import org.icecream.icecream.util.RandomFast; // IceCream
  
  public class CraftWorld extends CraftRegionAccessor implements World {
      public static final int CUSTOM_DIMENSION_OFFSET = 10;
@@ -497,7 +497,7 @@ index d1c7ab67cba881d96b7a5e9220130d86d0514304..309d1ce15aace9da4a84819e8511af2c
  import org.bukkit.entity.Firework;
  import org.bukkit.entity.LivingEntity;
  import org.bukkit.inventory.meta.FireworkMeta;
-+import org.icecream.icecream.utils.RandomFast; // IceCream
++import org.icecream.icecream.util.RandomFast; // IceCream
  
  public class CraftFirework extends CraftProjectile implements Firework {
  
@@ -514,7 +514,7 @@ index a9673a804d597599c35c83f4f245510c83005328..08d47eee550e2e9ddfb4dc0ce1294540
  import org.bukkit.generator.ChunkGenerator;
  import org.bukkit.generator.ChunkGenerator.BiomeGrid;
  import org.bukkit.generator.ChunkGenerator.ChunkData;
-+import org.icecream.icecream.utils.RandomFast; // IceCream
++import org.icecream.icecream.util.RandomFast; // IceCream
  
  public class CustomChunkGenerator extends InternalChunkGenerator {
  
