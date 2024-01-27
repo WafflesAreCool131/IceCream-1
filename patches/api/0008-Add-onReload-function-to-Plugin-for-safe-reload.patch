@@ -1,0 +1,58 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: xHyroM <generalkubo@gmail.com>
+Date: Sun, 19 Jun 2022 11:44:40 +0200
+Subject: [PATCH] Add onReload function to Plugin for safe reload
+
+
+diff --git a/src/main/java/org/bukkit/plugin/Plugin.java b/src/main/java/org/bukkit/plugin/Plugin.java
+index 4eb639fbb46a0848be207149ea433455550fae1c..1c6a523741d3c7c7a0a7b6154c86c19bf9965129 100644
+--- a/src/main/java/org/bukkit/plugin/Plugin.java
++++ b/src/main/java/org/bukkit/plugin/Plugin.java
+@@ -143,6 +143,13 @@ public interface Plugin extends TabExecutor {
+      */
+     public void onEnable();
+ 
++    // Sharkur start - Add onReload function to Plugin for safe reload
++    /**
++     * Called when /sharkur reload plugins is run.
++     */
++    public void onReload();
++    // Sharkur end
++
+     /**
+      * Simple boolean if we can still nag to the logs about things
+      *
+diff --git a/src/main/java/org/bukkit/plugin/java/JavaPlugin.java b/src/main/java/org/bukkit/plugin/java/JavaPlugin.java
+index 5cd236965de12392d8c7aa81307c0ff1cc8673b1..364374bbfa7a777133e3c0051fcd9f5e555f43ba 100644
+--- a/src/main/java/org/bukkit/plugin/java/JavaPlugin.java
++++ b/src/main/java/org/bukkit/plugin/java/JavaPlugin.java
+@@ -357,6 +357,11 @@ public abstract class JavaPlugin extends PluginBase {
+     @Override
+     public void onEnable() {}
+ 
++    // Sharkur start - Add onReload function to Plugin for safe reload
++    @Override
++    public void onReload() {}
++    // Sharkur end
++
+     @Nullable
+     @Override
+     public ChunkGenerator getDefaultWorldGenerator(@NotNull String worldName, @Nullable String id) {
+diff --git a/src/test/java/org/bukkit/plugin/TestPlugin.java b/src/test/java/org/bukkit/plugin/TestPlugin.java
+index 43b58e920e739bb949ac0673e9ef73ba7b500dc9..568129bf46be63190bb31d3caa3d4015d4a58e90 100644
+--- a/src/test/java/org/bukkit/plugin/TestPlugin.java
++++ b/src/test/java/org/bukkit/plugin/TestPlugin.java
+@@ -104,6 +104,13 @@ public class TestPlugin extends PluginBase {
+         throw new UnsupportedOperationException("Not supported.");
+     }
+ 
++    // Sharkur start - Add onReload function to Plugin for safe reload
++    @Override
++    public void onReload() {
++        throw new UnsupportedOperationException("Not supported.");
++    }
++    // Sharkur end
++
+     @Override
+     public boolean isNaggable() {
+         throw new UnsupportedOperationException("Not supported.");
