@@ -19,17 +19,17 @@ index f8d1631b274751a60d429f847ca7689e17adf1a2..12631a7174fdb9b8792caf0fb76cbbae
              // Paper start - load config files for access below if needed
              org.bukkit.configuration.file.YamlConfiguration bukkitConfiguration = io.papermc.paper.configuration.PaperConfigurations.loadLegacyConfigFile((File) optionset.valueOf("bukkit-settings"));
 @@ -180,7 +180,15 @@ public class Main {
-                 Main.LOGGER.info("You need to agree to the EULA in order to run the server. Go to eula.txt for more info.");
+                 IceCream.LOGGER.info("You need to agree to the EULA in order to run the server. Go to eula.txt for more info.");
                  return;
              }
 -
 +            // IceCream start - Global EULA
 +            if (dedicatedserversettings.getProperties().useGlobalEula) {
-+                Main.LOGGER.warn("");
-+                Main.LOGGER.warn("You are using IceCream's global EULA feature.");
-+                Main.LOGGER.warn("By using this setting you are indicating your agreement to Mojang's EULA (https://account.mojang.com/documents/minecraft_eula).");
-+                Main.LOGGER.warn("If you do not agree to the above EULA please stop your server and disable the feature immediately.");
-+                Main.LOGGER.warn("");
++                IceCream.LOGGER.warn("");
++                IceCream.LOGGER.warn("You are using IceCream's global EULA feature.");
++                IceCream.LOGGER.warn("By using this setting you are indicating your agreement to Mojang's EULA (https://account.mojang.com/documents/minecraft_eula).");
++                IceCream.LOGGER.warn("If you do not agree to the above EULA please stop your server and disable the feature immediately.");
++                IceCream.LOGGER.warn("");
 +            }
 +            // IceCream end - Global EULA
              // Paper start - Warn on headless
