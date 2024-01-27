@@ -1,0 +1,249 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: xHyroM <generalkubo@gmail.com>
+Date: Sat, 18 Jun 2022 12:21:50 +0200
+Subject: [PATCH] Sharkur config files
+
+
+diff --git a/src/main/java/org/sharkurmc/sharkur/SharkurConfig.java b/src/main/java/org/sharkurmc/sharkur/SharkurConfig.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..68f47fae66467ded113dcee05824603d3136d188
+--- /dev/null
++++ b/src/main/java/org/sharkurmc/sharkur/SharkurConfig.java
+@@ -0,0 +1,157 @@
++package org.sharkurmc.sharkur;
++
++import com.google.common.base.Throwables;
++import com.google.common.collect.ImmutableMap;
++import net.minecraft.server.MinecraftServer;
++import org.bukkit.Bukkit;
++import org.bukkit.command.Command;
++import org.bukkit.configuration.ConfigurationSection;
++import org.bukkit.configuration.InvalidConfigurationException;
++import org.bukkit.configuration.file.YamlConfiguration;
++import org.sharkurmc.sharkur.command.SharkurCommand;
++
++import java.io.File;
++import java.io.IOException;
++import java.lang.reflect.InvocationTargetException;
++import java.lang.reflect.Method;
++import java.lang.reflect.Modifier;
++import java.util.*;
++import java.util.logging.Level;
++
++@SuppressWarnings("unused")
++public class SharkurConfig {
++    private static final String HEADER = "This is the main configuration file for Sharkur.\n"
++            + "As you can see, there's actually not that much to configure.\n"
++            + "\n"
++            + "If you need help with the configuration or have any questions related to Sharkur,\n"
++            + "join us in our Discord guild.\n"
++            + "\n"
++            + "Website: https://icecreammc.github.io - \n"
++            + "Docs: - \n"
++            + "Discord: \n";
++    private static File CONFIG_FILE;
++    public static YamlConfiguration config;
++
++    private static Map<String, Command> commands;
++
++    public static int version;
++    static boolean verbose;
++
++    public static void init(File configFile) {
++        CONFIG_FILE = configFile;
++        config = new YamlConfiguration();
++        try {
++            config.load(CONFIG_FILE);
++        } catch (IOException ignore) {
++        } catch (InvalidConfigurationException ex) {
++            Bukkit.getLogger().log(Level.SEVERE, "Could not load sharkur.yml, please correct your syntax errors", ex);
++            throw Throwables.propagate(ex);
++        }
++        config.options().setHeader(List.of(HEADER.split("\\n")));
++        config.options().copyDefaults(true);
++        verbose = getBoolean("verbose", false);
++
++        commands = new HashMap<>();
++        commands.put("sharkur", new SharkurCommand("sharkur"));
++
++        version = getInt("config-version", 1);
++        set("config-version", 1);
++
++        readConfig(SharkurConfig.class, null);
++    }
++
++    protected static void log(String s) {
++        if (verbose) {
++            log(Level.INFO, s);
++        }
++    }
++
++    protected static void log(Level level, String s) {
++        Bukkit.getLogger().log(level, s);
++    }
++
++    public static void registerCommands() {
++        for (Map.Entry<String, Command> entry : commands.entrySet()) {
++            MinecraftServer.getServer().server.getCommandMap().register(entry.getKey(), "Sharkur", entry.getValue());
++        }
++    }
++
++    static void readConfig(Class<?> clazz, Object instance) {
++        for (Method method : clazz.getDeclaredMethods()) {
++            if (Modifier.isPrivate(method.getModifiers())) {
++                if (method.getParameterTypes().length == 0 && method.getReturnType() == Void.TYPE) {
++                    try {
++                        method.setAccessible(true);
++                        method.invoke(instance);
++                    } catch (InvocationTargetException ex) {
++                        throw Throwables.propagate(ex.getCause());
++                    } catch (Exception ex) {
++                        Bukkit.getLogger().log(Level.SEVERE, "Error invoking " + method, ex);
++                    }
++                }
++            }
++        }
++
++        try {
++            config.save(CONFIG_FILE);
++        } catch (IOException ex) {
++            Bukkit.getLogger().log(Level.SEVERE, "Could not save " + CONFIG_FILE, ex);
++        }
++    }
++
++    private static void set(String path, Object val) {
++        config.addDefault(path, val);
++        config.set(path, val);
++    }
++
++    private static String getString(String path, String def) {
++        config.addDefault(path, def);
++        return config.getString(path, config.getString(path));
++    }
++
++    private static boolean getBoolean(String path, boolean def) {
++        config.addDefault(path, def);
++        return config.getBoolean(path, config.getBoolean(path));
++    }
++
++    private static double getDouble(String path, double def) {
++        config.addDefault(path, def);
++        return config.getDouble(path, config.getDouble(path));
++    }
++
++    private static int getInt(String path, int def) {
++        config.addDefault(path, def);
++        return config.getInt(path, config.getInt(path));
++    }
++
++    private static <T> List getList(String path, T def) {
++        config.addDefault(path, def);
++        return config.getList(path, config.getList(path));
++    }
++
++    static Map<String, Object> getMap(String path, Map<String, Object> def) {
++        if (def != null && config.getConfigurationSection(path) == null) {
++            config.addDefault(path, def);
++            return def;
++        }
++        return toMap(config.getConfigurationSection(path));
++    }
++
++    private static Map<String, Object> toMap(ConfigurationSection section) {
++        ImmutableMap.Builder<String, Object> builder = ImmutableMap.builder();
++        if (section != null) {
++            for (String key : section.getKeys(false)) {
++                Object obj = section.get(key);
++                if (obj != null) {
++                    builder.put(key, obj instanceof ConfigurationSection val ? toMap(val) : obj);
++                }
++            }
++        }
++        return builder.build();
++    }
++
++    public static String sharkurCommandsPrefix = "<gradient:#1db0f3:#64cdfd>(Sharkur)</gradient:#1db0f3:#64cdfd>";
++    private static void messages() {
++        sharkurCommandsPrefix = getString("settings.messages.sharkur-commands-prefix", sharkurCommandsPrefix);
++    }
++}
+diff --git a/src/main/java/org/sharkurmc/sharkur/command/SharkurCommand.java b/src/main/java/org/sharkurmc/sharkur/command/SharkurCommand.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..cbafdf8123ab039bf6c29d78e313a0bac76f296e
+--- /dev/null
++++ b/src/main/java/org/sharkurmc/sharkur/command/SharkurCommand.java
+@@ -0,0 +1,74 @@
++package org.sharkurmc.sharkur.command;
++
++import net.kyori.adventure.text.minimessage.MiniMessage;
++import net.minecraft.server.MinecraftServer;
++import org.bukkit.Bukkit;
++import org.bukkit.Location;
++import org.bukkit.command.Command;
++import org.bukkit.command.CommandSender;
++import org.sharkurmc.sharkur.SharkurConfig;
++
++import java.io.File;
++import java.util.Collections;
++import java.util.List;
++import java.util.stream.Collectors;
++import java.util.stream.Stream;
++
++public class SharkurCommand extends Command {
++    public SharkurCommand(String name) {
++        super(name);
++        this.description = "Sharkur related commands";
++        this.usageMessage = "/sharkur [reload | version]";
++        this.setPermission("bukkit.command.sharkur");
++    }
++
++    @Override
++    public List<String> tabComplete(CommandSender sender, String alias, String[] args, Location location) throws IllegalArgumentException {
++        if (args.length == 1) {
++            return Stream.of("reload", "version")
++                    .filter(arg -> arg.startsWith(args[0].toLowerCase()))
++                    .collect(Collectors.toList());
++        }
++        return Collections.emptyList();
++    }
++
++    @Override
++    public boolean execute(CommandSender sender, String commandLabel, String[] args) {
++        if (!testPermission(sender)) return true;
++
++        if (args.length != 1) {
++            sendMessage(sender, SharkurConfig.sharkurCommandsPrefix + " Usage: " + usageMessage);
++            return false;
++        }
++
++        if (args[0].equalsIgnoreCase("reload")) {
++            sendMessage(sender, SharkurConfig.sharkurCommandsPrefix + "Please note that this command is not supported and may cause issues.", true);
++            sendMessage(sender, SharkurConfig.sharkurCommandsPrefix + "If you encounter any issues please use the /stop command to restart your server.", true);
++
++            MinecraftServer console = MinecraftServer.getServer();
++            SharkurConfig.init((File) console.options.valueOf("sharkur-settings"));
++            console.server.reloadCount++;
++
++            sendMessage(sender, SharkurConfig.sharkurCommandsPrefix + "Sharkur config reload complete.", true);
++        } else if (args[0].equalsIgnoreCase("version")) {
++            String version = Bukkit.getVersion();
++
++            if (version.startsWith("null")) version = "unknown, running from ide?";
++            sendMessage(sender, SharkurConfig.sharkurCommandsPrefix + " Version: <#64cdfd>" + version);
++        }
++
++        return true;
++    }
++
++    private void sendMessage(CommandSender sender, String message, boolean broadcast) {
++        if (broadcast) {
++            Command.broadcastCommandMessage(sender, MiniMessage.miniMessage().deserialize(message));
++        } else {
++            sender.sendMessage(MiniMessage.miniMessage().deserialize(message));
++        }
++    }
++
++    private void sendMessage(CommandSender sender, String message) {
++        sendMessage(sender, message, false);
++    }
++}
