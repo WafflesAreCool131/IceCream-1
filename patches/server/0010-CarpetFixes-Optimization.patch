@@ -9,6 +9,29 @@ Original project: https://github.com/fxmorin/carpet-fixes
 Optimized the getBiome call to be 25% - 75% faster
 This is a fully vanilla optimization.
 
+diff --git a/src/main/java/net/minecraft/world/item/crafting/RecipeManager.java b/src/main/java/net/minecraft/world/item/crafting/RecipeManager.java
+index d87124f5356180a37e581febc6141fdc5f1395a7..11f405e0a34a01b052ca50d5006dfe1f54bf08fa 100644
+--- a/src/main/java/net/minecraft/world/item/crafting/RecipeManager.java
++++ b/src/main/java/net/minecraft/world/item/crafting/RecipeManager.java
+@@ -11,8 +11,8 @@ import com.google.gson.JsonParseException;
+ import com.mojang.datafixers.util.Pair;
+ import com.mojang.logging.LogUtils;
+ import com.mojang.serialization.JsonOps;
++import java.util.ArrayList;
+ import java.util.Collection;
+-import java.util.Collections;
+ import java.util.Comparator;
+ import java.util.Iterator;
+ import java.util.List;
+@@ -137,7 +137,7 @@ public class RecipeManager extends SimpleJsonResourceReloadListener {
+     }
+ 
+     public <C extends Container, T extends Recipe<C>> List<RecipeHolder<T>> getAllRecipesFor(RecipeType<T> type) {
+-        return List.copyOf(this.byType(type).values());
++        return new ArrayList<>(this.byType(type).values()); // IceCream
+     }
+ 
+     public <C extends Container, T extends Recipe<C>> List<RecipeHolder<T>> getRecipesFor(RecipeType<T> type, C inventory, Level world) {
 diff --git a/src/main/java/net/minecraft/world/level/biome/BiomeManager.java b/src/main/java/net/minecraft/world/level/biome/BiomeManager.java
 index 5695c5116c8a338b2e41aafcb2dc9f2146856970..c984f4c0bc72a00ee424d6e8e3f64612f7c0847c 100644
 --- a/src/main/java/net/minecraft/world/level/biome/BiomeManager.java
