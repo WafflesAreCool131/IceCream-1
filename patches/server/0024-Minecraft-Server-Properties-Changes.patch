@@ -1,0 +1,20 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Pancakse <pancakseyt@gmail.com>
+Date: Sat, 28 Dec 2024 17:49:43 -0700
+Subject: [PATCH] Minecraft Server Properties Changes
+
+This patch disables the enforceSecureProfile option in server.properties by default.
+
+diff --git a/src/main/java/net/minecraft/server/dedicated/DedicatedServerProperties.java b/src/main/java/net/minecraft/server/dedicated/DedicatedServerProperties.java
+index 33e876787234033c4d39ccab691ba61a778828a5..3b0fac45d82476e99ff04ff278759dbea1ebff53 100644
+--- a/src/main/java/net/minecraft/server/dedicated/DedicatedServerProperties.java
++++ b/src/main/java/net/minecraft/server/dedicated/DedicatedServerProperties.java
+@@ -155,7 +155,7 @@ public class DedicatedServerProperties extends Settings<DedicatedServerPropertie
+         this.textFilteringConfig = this.get("text-filtering-config", "");
+         this.playerIdleTimeout = this.getMutable("player-idle-timeout", 0);
+         this.whiteList = this.getMutable("white-list", false);
+-        this.enforceSecureProfile = this.get("enforce-secure-profile", true);
++        this.enforceSecureProfile = this.get("enforce-secure-profile", false); // IceCream - disable by default
+         this.logIPs = this.get("log-ips", true);
+         String s = this.get("level-seed", "");
+         boolean flag = this.get("generate-structures", true);
