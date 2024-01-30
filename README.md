@@ -28,6 +28,28 @@
 4. Java Version: 17 or Above is required 
 6. Pancakes (jk)
 
+# How To (Plugin developers)
+IceCream-API:
+```kotlin
+maven {
+    name = 'icecream-repo'
+    url = 'http://135.181.141.62:4038/'
+}
+
+dependencies {
+    compileOnly("org.icecream.icecream:icecream-api:1.20.4-R0.1-SNAPSHOT")
+}
+ ```
+
+In order to use Leaves as a dependency you must [build it yourself](https://github.com/LeavesMC/Leaves#building).
+Each time you want to update your dependency, you must re-build Leaves.
+
+IceCream-Server:
+```kotlin
+dependencies {
+    compileOnly("org.icecream.icecream:icecream:1.20.4-R0.1-SNAPSHOT")
+}
+ ```
 
 # Self Building
 If you modify IceCream or just wanna build it your self here are the steps
