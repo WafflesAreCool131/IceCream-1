@@ -33,7 +33,7 @@ IceCream-API:
 ```kotlin
 maven {
     name = 'icecream-repo'
-    url = 'http://135.181.141.62:4038/'
+    url = 'http://135.181.141.62:4038/snapshots'
 }
 
 dependencies {
