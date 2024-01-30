@@ -98,7 +98,7 @@ tasks.generateDevelopmentBundle {
         listOf(
             "https://repo.maven.apache.org/maven2/",
             paperMavenPublicUrl,
-            "https://repo.purpurmc.org/snapshots",
+            "http://135.181.141.62:4038/snapshots",
         )
     )
 }
@@ -106,7 +106,7 @@ tasks.generateDevelopmentBundle {
 allprojects {
     publishing {
         repositories {
-            maven("https://repo.purpurmc.org/snapshots") {
+            maven("http://135.181.141.62:4038/snapshots") {
                 name = "icecream"
                 credentials(PasswordCredentials::class)
             }
